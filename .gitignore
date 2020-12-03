@@ -1,3 +1,4 @@
 .DS_Store
 radiometric_data/
 output/field_image/
+.ipynb_checkpoints/
