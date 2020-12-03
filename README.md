@@ -34,8 +34,8 @@ jupyter nbextension enable codefolding/main
 
 All data used/generated should be stored to [_output_](output/) folder.
 * Field images used as input should be put to [_output/field_image_](output/field_image/)
-* Plot locations from  [_Image Process 1.ipynb_](Image Process 1 - Set plots - V2.ipynb) should be put to [_output/plot_location_](output/plot_location/)
-* Indices of plots (in the form of a table) from [_Image Process 2.ipynb_](Image Process 1 - Set plots - V2.ipynb) should be put to [_output/final_result_](output/final_result)
+* Plot locations from [_Image Process 1.ipynb_](Image\ Process\ 1\ -\ Set\ plots\ -\ V2.ipynb) should be put to [_output/plot_location_](output/plot_location/)
+* Indices of plots (in the form of a table) from [_Image Process 2.ipynb_](Image\ Process\ 1\ -\ Set\ plots\ -\ V2.ipynb) should be put to [_output/final_result_](output/final_result)
 
 
 ### Run code
