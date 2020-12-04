@@ -1,4 +1,9 @@
 .DS_Store
+
+.ipynb_checkpoints/
+
+playground.ipynb
+
 radiometric_data/
 output/field_image/
-.ipynb_checkpoints/
+
