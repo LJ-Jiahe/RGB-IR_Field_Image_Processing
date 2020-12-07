@@ -5,5 +5,5 @@
 playground.ipynb
 
 radiometric_data/
-output/field_image/
-
+output/
+!output/**/demo
