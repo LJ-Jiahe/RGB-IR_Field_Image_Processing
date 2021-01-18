@@ -6,5 +6,5 @@ __pycache__/
 playground.ipynb
 
 radiometric_data/
-output/*
-!output/demo
+data/*
+!data/demo

@@ -12,7 +12,7 @@ def done():
     print('\nDone')
     if platform.system() == 'Windows':
         import winsound
-        winsound.Beep(500, 1000)
+        winsound.Beep(500, 1500)
     elif platform.system() == 'Darwin':
         import os
         os.system( "say Done" )
