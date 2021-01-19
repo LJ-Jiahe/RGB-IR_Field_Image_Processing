@@ -26,8 +26,8 @@ def done():
 def pix2geo(pix_loc, gt):
     a, b, c, d, e, f = gt
     x, y = pix_loc
-    xgeo = gt[0] + x*gt[1] + y*gt[2]
-    ygeo = gt[3] + x*gt[4] + y*gt[5]
+    xgeo = a + x*b + y*c
+    ygeo = d + x*e + y*f
     return([xgeo, ygeo])
     
     
