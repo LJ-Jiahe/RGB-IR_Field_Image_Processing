@@ -57,3 +57,19 @@ def cal_vmin_vmax(img, mask):
     vmin = allmin if allmin > three_left else three_left
     vmax = allmax if allmax < three_right else three_right
     return vmin, vmax
+
+
+def find_point_in_img_ref(point, mtp, mtp_ref, shift_geo):
+    diff = mtp - point
+    dist = np.sum(np.square(diff), axis=1)
+    if 0 in dist:
+        shift_coef = np.zeros(len(diff))
+        ind = np.where(dist==0)
+        shift_coef[ind] = 1
+    else:
+        dist_inv = 1 / dist
+        sum_dist_inv = np.sum(dist_inv)
+        shift_coef = dist_inv / sum_dist_inv
+    shift_coef = np.expand_dims(shift_coef, 1)
+    point_shift_geo= np.sum(np.multiply(shift_geo, shift_coef), 0)
+    return(point_shift_geo)
