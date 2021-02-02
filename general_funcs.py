@@ -2,9 +2,61 @@
 import platform
 import gc
 
+import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
 
+
+
+# Extract layer RGB, IR & Mask from image
+def extract_layers(img):
+    h, w, d = img.shape
+    
+    # Layer mask
+    layer_mask = np.copy(img[:, :, -1]).astype(np.uint8)
+
+    # Layer RGB
+    if d == 5 or d == 4:
+        # Change RGB value to 0~255, then change precision to save space
+        if img[:, :, 0:3].max() > 255:
+            layer_RGB = np.copy(img[:, :, 0:3] / 257).astype(np.uint8)
+        elif img[:, :, 0:3].max() > 1:
+            layer_RGB = np.copy(img[:, :, 0:3]).astype(np.uint8)
+        else:
+            layer_RGB = np.copy(img[:, :, 0:3] * 255).astype(np.uint8)
+        # Set background to black
+        layer_RGB[np.where(layer_mask == 0)] = 0
+
+    # Layer IR
+    if d == 5:
+        layer_IR = np.copy(img[:, :, 3])
+        # Set background to black
+        layer_IR[np.where(layer_mask == 0)] = 0
+    elif d == 2:
+        layer_IR = np.copy(img[:, :, 0])
+        # Set background to black
+        layer_IR[np.where(layer_mask == 0)] = 0
+    
+    if d == 4:
+        layer_IR = []
+    elif d == 2:
+        layer_RGB = []
+        
+    return(layer_RGB, layer_IR, layer_mask)
+
+
+def RGB2HSV(layer_RGB):
+    layer_HSV = matplotlib.colors.rgb_to_hsv(layer_RGB)
+    layer_HSV[:, :, 0] = layer_HSV[:, :, 0] * 360
+    layer_HSV[:, :, 2] = layer_HSV[:, :, 2] / 255
+    
+    return(layer_HSV)
+
+
+def DGCI(layer_HSV):
+    layer_DGCI = (layer_HSV[:, :, 0] / 60 + (1 - layer_HSV[:, :, 1]) + (1 - layer_HSV[:, :, 2])) / 3
+    
+    return(layer_DGCI)
 
 
 # Play sound when done
