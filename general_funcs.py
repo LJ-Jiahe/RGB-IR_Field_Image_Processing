@@ -5,6 +5,8 @@ import gc
 import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
+import math
+from math import cos
 
 
 
@@ -89,6 +91,36 @@ def geo2pix(geo_loc, gt):
     x = (xgeo - a) / b
     y = (ygeo - d) / f
     return([x, y])
+
+
+def meter_per_pix(gt):
+    latitude = gt[3]
+    latitude_radian = math.radians(latitude)
+    lon_degree_per_pix = gt[1]
+    lat_degree_per_pix = -gt[5]
+
+    lon_meter_per_degree = 111412.84*cos(latitude_radian) - 93.5*cos(3*latitude_radian) + 0.118*cos(5*latitude_radian)
+    lat_meter_per_degree = 111132.92 - 559.82*cos(2*latitude_radian) + 1.175*cos(4*latitude_radian) - 0.0023*cos(6*latitude_radian)
+    
+    lon_meter_per_pix = lon_meter_per_degree * lon_degree_per_pix
+    lat_meter_per_pix = lat_meter_per_degree * lat_degree_per_pix
+
+    return(lon_meter_per_pix, lat_meter_per_pix)
+
+
+def plotVGPS2plotV(plot_vertices_gps, gt):
+    plot_vertices = {}
+    for plot_name in plot_vertices_gps.keys():
+        one_plot_vertices_gps = plot_vertices_gps[plot_name]
+        one_plot_vertices = []
+        for vertex in one_plot_vertices_gps:
+            pix_loc = geo2pix(vertex, gt)
+            one_plot_vertices.append(pix_loc)
+        one_plot_vertices = np.array(one_plot_vertices)
+        one_plot_vertices = np.round(one_plot_vertices)
+        one_plot_vertices = one_plot_vertices.astype(int)
+        plot_vertices[plot_name] = (one_plot_vertices)
+    return plot_vertices
 
 
 def hist_of_img(img, bins):
