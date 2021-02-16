@@ -4,6 +4,7 @@
 __pycache__/
 
 playground.ipynb
+!.placeholder
 
 radiometric_data/
 data/*

@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import math
 from math import cos
+from PIL import Image
 
 
 
@@ -44,7 +45,16 @@ def extract_layers(img):
     elif d == 2:
         layer_RGB = []
         
-    return(layer_RGB, layer_IR, layer_mask)
+    if layer_RGB != []:
+        length = h/5 if h>w else w/5
+        size = [length, length]
+        layer_RGB_low_res = Image.fromarray(layer_RGB)
+        layer_RGB_low_res.thumbnail(size, Image.ANTIALIAS)
+        layer_RGB_low_res = np.asarray(layer_RGB_low_res)
+    else:
+        layer_RGB_low_res = []
+        
+    return(layer_RGB, layer_IR, layer_mask, layer_RGB_low_res)
 
 
 def RGB2HSV(layer_RGB):
@@ -143,8 +153,21 @@ def cal_vmin_vmax(img, mask):
     return vmin, vmax
 
 
-def find_point_in_img_ref(point, mtp, mtp_ref, shift_geo):
-    diff = mtp - point
+def fig_size(h, w):
+    ratio = h/w
+    if ratio >= 2:
+        fig_size = [6, 10]
+    elif ratio > 0.5 and ratio <2:
+        fig_size = [9, 9]
+    else:
+        fig_size = [10, 6]
+        
+#     return(fig_size)
+    return([10, 10])
+
+
+def find_point_in_img(point_ref, mtp, mtp_ref, shift_geo):    
+    diff = mtp_ref - point_ref
     dist = np.sum(np.square(diff), axis=1)
     if 0 in dist:
         shift_coef = np.zeros(len(diff))
