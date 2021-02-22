@@ -46,7 +46,8 @@ def extract_layers(img):
         layer_RGB = []
         
     if layer_RGB != []:
-        length = h/5 if h>w else w/5
+        ratio = 5
+        length = h/ratio if h>w else w/ratio
         size = [length, length]
         layer_RGB_low_res = Image.fromarray(layer_RGB)
         layer_RGB_low_res.thumbnail(size, Image.ANTIALIAS)
