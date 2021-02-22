@@ -10,3 +10,4 @@ playground.*
 radiometric_data/
 data/
 !data/*/.placeholder
+legacy/
