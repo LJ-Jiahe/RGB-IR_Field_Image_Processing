@@ -5,9 +5,10 @@ __pycache__/
 .vscode/
 
 playground.*
-!.placeholder
 
-radiometric_data/
-data/
-!data/*/.placeholder
-legacy/
+/radiometric_data/
+/legacy/
+/data/*
+!/data/**/
+/data/*/**
+!.placeholder
