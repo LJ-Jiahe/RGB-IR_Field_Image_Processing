@@ -2,10 +2,11 @@
 
 .ipynb_checkpoints/
 __pycache__/
+.vscode/
 
-playground.ipynb
+playground.*
 !.placeholder
 
 radiometric_data/
-data/*
-!data/demo
+data/
+!data/*/.placeholder

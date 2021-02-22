@@ -6,7 +6,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
 import math
-from math import cos
+from math import cos, radians
 from PIL import Image
 
 
@@ -104,13 +104,12 @@ def geo2pix(geo_loc, gt):
 
 
 def meter_per_pix(gt):
-    latitude = gt[3]
-    latitude_radian = math.radians(latitude)
+    lat = radians(gt[3])
     lon_degree_per_pix = gt[1]
     lat_degree_per_pix = -gt[5]
 
-    lon_meter_per_degree = 111412.84*cos(latitude_radian) - 93.5*cos(3*latitude_radian) + 0.118*cos(5*latitude_radian)
-    lat_meter_per_degree = 111132.92 - 559.82*cos(2*latitude_radian) + 1.175*cos(4*latitude_radian) - 0.0023*cos(6*latitude_radian)
+    lon_meter_per_degree = 111412.84 * cos(lat) - 93.5 * cos(3 * lat) + 0.118 * cos(5 * lat)
+    lat_meter_per_degree = 111132.92 - 559.82 * cos(2 * lat) + 1.175 * cos(4 * lat) - 0.0023 * cos(6 * lat)
     
     lon_meter_per_pix = lon_meter_per_degree * lon_degree_per_pix
     lat_meter_per_pix = lat_meter_per_degree * lat_degree_per_pix
