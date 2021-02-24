@@ -45,17 +45,20 @@ def extract_layers(img):
     elif d == 2:
         layer_RGB = []
         
-    if layer_RGB != []:
-        ratio = 5
-        length = h/ratio if h>w else w/ratio
+    return(layer_RGB, layer_IR, layer_mask)
+
+
+def low_res(img, scale_factor):
+    h, w, d = img.shape
+    if img != []:
+        length = h/scale_factor if h>w else w/scale_factor
         size = [length, length]
-        layer_RGB_low_res = Image.fromarray(layer_RGB)
-        layer_RGB_low_res.thumbnail(size, Image.ANTIALIAS)
-        layer_RGB_low_res = np.asarray(layer_RGB_low_res)
+        img_low_res = Image.fromarray(img)
+        img_low_res.thumbnail(size, Image.ANTIALIAS)
+        img_low_res = np.asarray(img_low_res)
     else:
-        layer_RGB_low_res = []
-        
-    return(layer_RGB, layer_IR, layer_mask, layer_RGB_low_res)
+        img_low_res = []
+    return img_low_res
 
 
 def RGB2HSV(layer_RGB):
