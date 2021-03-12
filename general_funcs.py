@@ -70,7 +70,7 @@ def RGB2HSV(layer_RGB):
 
 
 def DGCI(layer_HSV):
-    layer_DGCI = (layer_HSV[:, :, 0] / 60 + (1 - layer_HSV[:, :, 1]) + (1 - layer_HSV[:, :, 2])) / 3
+    layer_DGCI = (layer_HSV[:, :, 0] / 60 + (1 - layer_HSV[:, :, 1]) + (1 - layer_HSV[:, :, 2]/255)) / 3
     
     return(layer_DGCI)
 
