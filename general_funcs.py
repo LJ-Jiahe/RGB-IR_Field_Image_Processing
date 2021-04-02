@@ -6,7 +6,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
 import math
-from math import cos, radians
+from math import cos, sin, radians
 from PIL import Image
 
 
@@ -159,14 +159,14 @@ def cal_vmin_vmax(img, mask):
 def fig_size(h, w):
     ratio = h/w
     if ratio >= 2:
-        fig_size = [6, 10]
+        fig_size = [6, 9]
     elif ratio > 0.5 and ratio <2:
         fig_size = [9, 9]
     else:
-        fig_size = [10, 6]
+        fig_size = [9, 6]
         
 #     return(fig_size)
-    return([10, 10])
+    return([9, 9])
 
 
 def find_point_in_img(point_ref, mtp, mtp_ref, shift_geo):    
@@ -183,3 +183,22 @@ def find_point_in_img(point_ref, mtp, mtp_ref, shift_geo):
     shift_coef = np.expand_dims(shift_coef, 1)
     point_shift_geo= np.sum(np.multiply(shift_geo, shift_coef), 0)
     return(point_shift_geo)
+
+
+
+def undo_rotation(rot_points, rot_degree, rot_center):
+    # https://math.stackexchange.com/questions/270194/how-to-find-the-vertices-angle-after-rotation
+    rot_rad = radians(rot_degree)
+    # Rotate back
+    rot_rad = -rot_rad
+    x = (rot_points[0, :]-rot_center[0])*cos(rot_rad) - (rot_points[1, :]-rot_center[1])*sin(rot_rad) + rot_center[0]
+    y = (rot_points[0, :]-rot_center[0])*sin(rot_rad) + (rot_points[1, :]-rot_center[1])*cos(rot_rad) + rot_center[1]
+
+    original_points = np.asarray([x, y])
+    return(original_points)
+
+
+def do_nothing(*args):
+    return
+    
+    

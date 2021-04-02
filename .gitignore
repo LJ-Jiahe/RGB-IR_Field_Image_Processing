@@ -5,6 +5,7 @@ __pycache__/
 .vscode/
 
 playground.*
+hyperspectral_pg.ipynb
 
 /radiometric_data/
 /legacy/
