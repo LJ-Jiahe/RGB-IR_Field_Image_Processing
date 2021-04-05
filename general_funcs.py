@@ -185,12 +185,11 @@ def find_point_in_img(point_ref, mtp, mtp_ref, shift_geo):
     return(point_shift_geo)
 
 
-
+# Rotate rot_points clockwise relative to rot_center, because scipy.ndimage does it counter-clockwise
 def undo_rotation(rot_points, rot_degree, rot_center):
     # https://math.stackexchange.com/questions/270194/how-to-find-the-vertices-angle-after-rotation
     rot_rad = radians(rot_degree)
     # Rotate back
-    rot_rad = -rot_rad
     x = (rot_points[0, :]-rot_center[0])*cos(rot_rad) - (rot_points[1, :]-rot_center[1])*sin(rot_rad) + rot_center[0]
     y = (rot_points[0, :]-rot_center[0])*sin(rot_rad) + (rot_points[1, :]-rot_center[1])*cos(rot_rad) + rot_center[1]
 
