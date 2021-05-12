@@ -19,7 +19,7 @@ def extract_layers(img):
     layer_mask = np.copy(img[:, :, -1]).astype(np.uint8)
 
     # Layer RGB
-    if d == 5 or d == 4:
+    if d == 5:
         # Change RGB value to 0~255, then change precision to save space
         if img[:, :, 0:3].max() > 255:
             layer_RGB = np.copy(img[:, :, 0:3] / 257).astype(np.uint8)
@@ -29,21 +29,17 @@ def extract_layers(img):
             layer_RGB = np.copy(img[:, :, 0:3] * 255).astype(np.uint8)
         # Set background to black
         layer_RGB[np.where(layer_mask == 0)] = 0
-
-    # Layer IR
-    if d == 5:
+        
         layer_IR = np.copy(img[:, :, 3])
         # Set background to black
         layer_IR[np.where(layer_mask == 0)] = 0
-    elif d == 2:
+
+    if d == 2:
+        layer_RGB = []
+        
         layer_IR = np.copy(img[:, :, 0])
         # Set background to black
         layer_IR[np.where(layer_mask == 0)] = 0
-    
-    if d == 4:
-        layer_IR = []
-    elif d == 2:
-        layer_RGB = []
         
     return(layer_RGB, layer_IR, layer_mask)
 
@@ -195,6 +191,63 @@ def undo_rotation(rot_points, rot_degree, rot_center):
 
     original_points = np.asarray([x, y])
     return(original_points)
+
+
+
+def flir_linear_high_res_thermal_to_temp(thermal_reading:np.array, precision:int = 4):
+    temp = np.round(thermal_reading  * 0.04 - 273.15, precision)
+    return temp
+
+
+# Expect 14 bit input
+def flir_non_linear_thermal_to_temp(data_counts:np.array, tau:float = 0, precision:int = 4):
+    #%% object parameters
+    Emiss = 1.0
+    distance = 50.0 ##################### Modified
+    TRefl = 21.85
+    TAtmC = 21.85
+    TAtm = TAtmC + 273.15
+    Humidity = 10.0/100 ##################### Modified
+
+    TExtOptics = 20
+    TransmissionExtOptics = 1.0
+
+    Tau =  0.89 ##################### Modified
+
+    #%% camera calibration parameters
+    # these depend on indivudal cameras and temperature range cases
+    R = 16556 # this must be R_Thg for Ax5 cameras
+    B = 1428.0
+    F = 1.0
+    J1 = 27.2009 ##################### Modified
+    J0 = -932.399 ##################### Modified # sometimes refered to as O on Ax5 cameras
+    
+    # if tau != 0:
+    #     H2O = Humidity * np.exp(1.5587 + 0.06939*TAtmC -0.00027816*TAtmC*TAtmC +0.00000068455*TAtmC*TAtmC*TAtmC)
+    #     Tau = X * np.exp(-np.sqrt(Dist) * (A1 + B1 * np.sqrt(H2O))) + (1 - X) * np.exp(-np.sqrt(Dist) * (A2 + B2 * np.sqrt(H2O)))
+    # else:
+    #     Tau = tau 
+            
+        
+    K1 = 1 / (Tau * Emiss * TransmissionExtOptics)
+        
+    # Pseudo radiance of the reflected environment
+    r1 = ((1-Emiss)/Emiss) * (R/(np.exp(B/TRefl)-F))
+    # Pseudo radiance of the atmosphere
+    r2 = ((1 - Tau)/(Emiss * Tau)) * (R/(np.exp(B/TAtm)-F)) 
+    # Pseudo radiance of the external optics
+    r3 = ((1-TransmissionExtOptics) / (Emiss * Tau * TransmissionExtOptics)) * (R/(np.exp(B/TExtOptics)-F))
+            
+    K2 = r1 + r2 + r3
+
+    
+    data_obj_signal = (data_counts - J0)/J1
+    data_temp = (B / np.log(R/((K1 * data_obj_signal) - K2) + F)) - 273.15
+    data_temp = np.round(data_temp, precision)
+
+#     print(r1, r2, r3)
+#     print()
+    return data_temp#, data_obj_signal
 
 
 def do_nothing(*args):
