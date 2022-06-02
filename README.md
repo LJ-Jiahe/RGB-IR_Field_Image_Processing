@@ -10,6 +10,7 @@ What's been listed below are the software I used specifically in this project. Y
 Some related installation and deployment instrunctions will not be included in next section. Please see official websites provided below for related tutorial.  
 
 ```
+GitHub Desktop (Windows)
 Anaconda
 Jupyter Notebook(JN)
 ```
