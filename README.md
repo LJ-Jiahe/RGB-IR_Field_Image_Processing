@@ -18,7 +18,7 @@ Jupyter Notebook(JN)
 ### Python Packages
 
 ```
-conda install -c anaconda pillow matplotlib ipywidgets pandas xlrd scipy
+conda install -c anaconda pillow matplotlib=3.3 ipywidgets=7.13 pandas xlrd scipy
 conda install -c conda-forge opencv scikit-image gdal spectral piexif tqdm notebook jupyter_contrib_nbextensions 
 ```
 
